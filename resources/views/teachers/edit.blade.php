@@ -9,7 +9,7 @@
 @endsection
 
 @section('form-action')
-	action = "{{ route('maestros.editar', ['teachers' => $teacher->id ]) }}"  enctype="multipart/form-data"
+	action = "{{ route('maestros.update', ['teachers' => $teacher->id ]) }}"  enctype="multipart/form-data"
 @endsection
 
 @section('form-content')
@@ -106,6 +106,10 @@
               <button class="file-upload-browse btn btn-info" type="button">Subir</button>
             </span>
           </div>
+          <div class="col-sm-3 col-form-label"></div>
+          <div class="col-sm-1 col-form-label">
+            <img class="img-md rounded-circle mb-4 mb-md-0" src="{{ Storage::url($teacher->user->profilePicture) }}" alt="profile image">
+          </div>
         </div>
 	  </div>
 	  <div class="col-md-6">
@@ -162,8 +166,8 @@
           <label class="col-sm-3 col-form-label">Estado</label>
           <div class="col-sm-9">
             <select name="active" class="form-control">
-              <option value="1" {{ $teacher->active == '1' ? 'selected' : ''}}>Activo</option>
-              <option value="0" {{ $teacher->active == '0' ? 'selected' : ''}}>Inactivo</option>
+              <option value="1" {{ $teacher->user->active == '1' ? 'selected' : ''}}>Activo</option>
+              <option value="0" {{ $teacher->user->active == '0' ? 'selected' : ''}}>Inactivo</option>
             </select>
           </div>
         </div>

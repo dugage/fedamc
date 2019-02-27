@@ -6,17 +6,6 @@
 
 @section('content-description')
 	En esta tabla se encuentra todos los usuarios tanto federados como maestros.
-
-	@isset ($info)
-
-		<div class="alert alert-warning alert-dismissible fade show" role="alert">
-		  {{ $info }}
-		  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-		    <span aria-hidden="true">&times;</span>
-		  </button>
-		</div>
-	   
-	@endisset
 @endsection
 
 @section('form-button')
@@ -35,29 +24,34 @@
 @endsection
 
 @section('table-body')
-	@foreach ($users as $user)
+	@foreach ($data as $user)
 		<tr>
 		    <td class="py-1">
 		      {{ $user->name }}
 		    </td>
 		    <td>
-		      {{ $user->lastname }}
+		      {{ $user->lastname ?? '-' }}
 		    </td>
 		    <td>
 		       {{ $user->email }}
 		    </td>
 		    <td>
 		    	@if (isset($user->teacher))
-		    	    <label class="badge badge-warning">Maestro</label>
+		    		<a href="{{ route('maestros.ver', ['teachers' => $user->teacher->id ]) }}" class="badge badge-warning">Maestro</a>
+		    		
 		    	@elseif(isset($user->studend))
-					<label class="badge badge-success">Federado</label>
+					<a href="{{ route('federados.ver', ['studends' => $user->studend->id ]) }}" class="badge badge-success">Federado</a>
 				@else
-					<label class="badge badge-danger">Director</label>
+					<a href="{{ route('usuarios.ver', ['user' => $user->id ]) }}" class="badge badge-danger">Director</a>
 				@endif
 		    	
 		    </td>
 		    <td>
-		    	<label class="badge badge-warning">Activo</label>
+		    	@if ($user->active == 1)
+		    		<label class="badge badge-info">Activo</label>
+		    	@else
+					<label class="badge badge-dark">Desactivado</label>
+		    	@endif
 		    </td>
 		    <td>
 		    	<div class="btn-group" role="group" aria-label="Basic example">

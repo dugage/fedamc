@@ -19,11 +19,10 @@ class CreateStudendsTable extends Migration
             $table->unsignedInteger('idTeacher');
             $table->string('name');
             $table->string('lastname')->nullable();
-            $table->string('profilePicture')->nullable()->default('images/users/user.jpg');
             $table->string('email')->unique();
-            $table->string('password');
             $table->integer('phone')->nullable();
             $table->string('address')->nullable();
+            $table->date('birdDate')->nullable();
             $table->string('cp')->nullable();
             $table->string('city')->nullable();
             $table->string('club')->nullable();
@@ -31,7 +30,6 @@ class CreateStudendsTable extends Migration
             $table->string('license')->nullable();
             $table->date('startLicense')->nullable();
             $table->date('endLicense')->nullable();
-            $table->boolean('active')->nullable()->default('1');
             $table->foreign('idUser')->references('id')->on('users');
             $table->foreign('idTeacher')->references('id')->on('teachers');
             $table->timestamps();
@@ -45,7 +43,11 @@ class CreateStudendsTable extends Migration
      */
     public function down()
     {
-        $table->dropForeign('idUser');
+        Schema::table('studends', function (Blueprint $table) {
+            $table->dropForeign(['idUser']);
+            $table->dropForeign(['idTeacher']);
+            $table->dropColumn(['idUser','idTeacher']);
+        });
         Schema::dropIfExists('studends');
     }
 }

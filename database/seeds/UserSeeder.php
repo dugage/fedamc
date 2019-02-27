@@ -12,10 +12,24 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('users')->insert([
+            'name' =>'Sin Asignar',
+            'email' => 'sinasignar@gmail.com',
+            'password' => bcrypt('secret'),
+        ]);
+
     	User::create([
     		'name' => 'fedamc',
             'email' => 'demo@demo.com',
             'password' => bcrypt('secret'),
     	]);
+
+       /* User::create([
+            'id' => 0,
+            'name' => 'Sin Asignar',
+            'email' => 'sinasignar@gmail.com',
+            'password' => bcrypt('secret'),
+        ]);
+        */
     }
 }

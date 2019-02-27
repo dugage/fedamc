@@ -1,8 +1,9 @@
 <?php
+
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Studends;
-use App\Teacher;
+use App\Teachers;
 use App\User;
 
 class StudendsController extends Controller
@@ -10,37 +11,49 @@ class StudendsController extends Controller
 
     public function index(){
         //Buscamos todos los federados
-    	$data = Studends::all();
-    	return view('studends.index')->with('studends', $data);
+    	$data = Studends::paginate(15);
+    	return view('studends.index')->with('data', $data);
 
     }
 
-    public function new(Request $request){
+    public function create(){
+        $teachers = Teachers::all();
+        return view('studends.new')->with('teachers', $teachers);
+    }
+
+    public function store(Request $request){
         //validamos
+
     	$data = $request->validate([
     		'name' => 'required',
     		'lastname' => 'required',
     		'email' => 'required|email|unique:users,email',
+            'birdDate' => 'date',
+            'club' => '',
     		'license' => 'numeric',
+            'startLicense' => 'date',
+            'endLicense' => 'date',
     		'profilePicture' => 'image',
             'password' => 'required',
             'phone' => 'numeric|min:9',
             'fNacimiento' => 'date',
             'activity' => '',
             'address' => '',
-            'cp' => 'numeric|min:5',
+            'cp' => '',
             'city' => '',
-            'active' => 'required',
+            'active' => '',
             'rate' => 'numeric',
             'idUser' => '',
-            'idMaster' => '',
+            'idTeacher' => '',
     	]);
+
+        $data['typeUser'] = 'federado';
+        //encriptamos la contraseña
+        $data['password'] = bcrypt('password');
         //creamos el usuario primero
     	$user = User::create($data);
         //guardamos el id de ese usuario
    		$data['idUser'] = $user->id;
-        //encriptamos la contraseña
-        $data['password'] = bcrypt('password');
         //Comprobamos si hay imagen
     	if ($request->hasFile('profilePicture')) {
    			$data['profilePicture'] = $request->file('profilePicture')->store('public/profiles');
@@ -52,11 +65,15 @@ class StudendsController extends Controller
     }
 
     public function show(Studends $studends){
-        return view('studend.show')->with('studend',$studends);
+        return view('studends.show')->with('studend',$studends);
     }
 
     public function edit(Studends $studends){
-        return view('studends.edit')->with('studend',$studends);
+        $teachers = Teachers::all();
+        return view('studends.edit')->with([
+            'studend'=> $studends,
+            'teachers' => $teachers
+        ]);
     }
 
     public function update(Request $request, Studends $studends){
@@ -65,18 +82,23 @@ class StudendsController extends Controller
             'name' => 'required',
             'lastname' => 'required',
             'email' => 'required|email|unique:users,email,'.$studends->user->id,
-            'license' => '',
+            'birdDate' => 'date',
+            'club' => '',
+            'license' => 'numeric',
+            'startLicense' => 'date',
+            'endLicense' => 'date',
             'profilePicture' => 'image',
             'password' => '',
-            'phone' => '',
+            'phone' => 'numeric|min:9',
             'fNacimiento' => 'date',
-            'address' => '',
-            'cp' => 'numeric|min:5',
-            'city' => '',
             'activity' => '',
-            'active' => 'required',
+            'address' => '',
+            'cp' => '',
+            'city' => '',
+            'active' => '',
             'rate' => 'numeric',
             'idUser' => '',
+            'idTeacher' => '',
         ]);
         //Comprobamos si la contraseña esta vacia
         if ($data['password'] != null) {
@@ -86,7 +108,7 @@ class StudendsController extends Controller
         }
         //Comprobamos si hay imagen
    		if ($request->hasFile('profilePicture')) {
-   			$data['profilePicture'] = $request->file('profilePicture')->store('public/profile');
+   			$data['profilePicture'] = $request->file('profilePicture')->store('public/profiles');
    		}
         //Actualizamos usuario
         $studends->user->update($data);
@@ -97,7 +119,7 @@ class StudendsController extends Controller
 
     }
 
-    public function delete(Studends $studends){
+    public function destroy(Studends $studends){
         //Guardamos el id de usuario para eliminarlo despues
         $idUser = $studends->user->id;
         //Eliminamos el federado

@@ -15,10 +15,9 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $table = 'users';
 
     protected $fillable = [
-        'name', 'email', 'password','lastname', 'profilePicture',
+        'name', 'email', 'password','lastname', 'profilePicture','active','typeUser',
     ];
     
     /**
@@ -27,7 +26,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token','rol',
+        'password', 'remember_token',
     ];
 
 
@@ -36,8 +35,8 @@ class User extends Authenticatable
         return $this->hasOne(Teachers::class, 'idUser');
     }
 
-    public function student()
+    public function studend()
     {
-        return $this->hasOne('App\Studens', 'idUser');
+        return $this->hasOne(Studends::class, 'idUser');
     }
 }

@@ -14,7 +14,7 @@ class Teachers extends Model
     protected $table = 'teachers';
 
     protected $fillable = [
-        'name', 'email','lastname', 'profilePicture', 'fNacimiento', 'phone','address','cp','city','activity','license','rate', 'active','idUser',
+        'id','name', 'email','lastname', 'profilePicture', 'fNacimiento', 'phone','address','cp','city','activity','license','rate','idUser',
     ];
     
     /**
@@ -30,5 +30,9 @@ class Teachers extends Model
     public function user()
     {
       return $this->belongsTo(User::class,'idUser');
+    }
+
+    public function studends(){
+        return $this->hasMany(Studends::class, 'idTeacher');
     }
 }

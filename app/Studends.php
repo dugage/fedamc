@@ -11,8 +11,10 @@ class Studends extends Model
      *
      * @var array
      */
+    protected $table = 'studends';
+
     protected $fillable = [
-        'name', 'email', 'password','lastname', 'profilePicture', 'phone','address','cp','city','club','activity','license','startLicense','endLicense','rate','idTeacher',
+        'name', 'email', 'birdDate','lastname', 'phone','address','cp','city','club','activity','license','startLicense','endLicense','rate','idUser','idTeacher',
     ];
     
     /**
@@ -20,6 +22,7 @@ class Studends extends Model
      *
      * @var array
      */
+
     protected $hidden = [
         'password', 'remember_token','rol',
     ];

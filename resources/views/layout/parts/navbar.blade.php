@@ -109,7 +109,7 @@
       <li class="nav-item dropdown d-none d-xl-inline-block">
         <a class="nav-link dropdown-toggle" id="UserDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
           <span class="profile-text">Hola, {{ Auth::user()->name }}!</span>
-          <img class="img-xs rounded-circle" src="{{ asset('fedamc/images/faces/face1.jpg') }}" alt="Profile image">
+          <img class="img-xs rounded-circle" src="{{ Storage::url(Auth::user()->profilePicture ) }}" alt="Profile image">
         </a>
         <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
           <a href="#"class="dropdown-item mt-2">

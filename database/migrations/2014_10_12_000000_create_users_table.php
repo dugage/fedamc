@@ -18,9 +18,12 @@ class CreateUsersTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('lastname')->nullable();
-            $table->string('profilePicture')->nullable()->default('images/users/user.jpg');
+            $table->string('profilePicture')->nullable()->default('public/profiles/user.jpg');
             $table->string('email')->unique();
-            $table->string('password');           
+            $table->string('typeUser')->default('federado');
+            $table->string('password'); 
+            $table->boolean('active')->nullable()->default('1');
+            $table->timestamp('email_verified_at')->nullable();          
             $table->rememberToken();
             $table->timestamps();
         });

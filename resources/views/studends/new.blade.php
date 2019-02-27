@@ -9,7 +9,7 @@
 @endsection
 
 @section('form-action')
-	action = "{{ route('federados.nuevo') }}" enctype="multipart/form-data"
+	action = "{{ route('federados.store') }}" enctype="multipart/form-data"
 @endsection
 
 @section('form-content')
@@ -36,9 +36,9 @@
 	</div><div class="row">
 	  <div class="col-md-6">
 	  	<div class="form-group row">
-	      <label class="col-sm-3 col-form-label">Fecha de Nacimiento</label>
+	      <label class="col-sm-3 col-form-label">Correo Electrónico</label>
 	      <div class="col-sm-9">
-	        <input name="fNacimiento" class="form-control" placeholder="dd/mm/yyyy" value="{{ old('fNacimiento') }}">
+	        <input name="email" type="text" class="form-control" placeholder="dd/mm/yyyy" value="{{ old('email') }}">
 	      </div>
 	    </div>
 	  </div>
@@ -56,7 +56,7 @@
 	    <div class="form-group row">
 	      <label class="col-sm-3 col-form-label">Inicio de Licencia</label>
 	      <div class="col-sm-9">
-	        <input name="startLicense" class="form-control" placeholder="dd/mm/yyyy" value="{{ old('starLicense') }}">
+	        <input name="startLicense" type="date" class="form-control" placeholder="dd/mm/yyyy" value="{{ old('startLicense') }}">
 	      </div>
 	    </div>
 	  </div>
@@ -64,12 +64,20 @@
 	    <div class="form-group row">
 	      <label class="col-sm-3 col-form-label">Fin de Licencia</label>
 	      <div class="col-sm-9">
-	        <input name="endLicense" class="form-control" placeholder="dd/mm/yyyy" value="{{ old('endLicense') }}">
+	        <input name="endLicense" type="date" class="form-control" placeholder="dd/mm/yyyy" value="{{ old('endLicense') }}">
 	      </div>
 	    </div>
 	  </div>
 	</div>
 	<div class="row">
+	  <div class="col-md-6">
+	    <div class="form-group row">
+	      <label class="col-sm-3 col-form-label">Fecha Nacimiento</label>
+	      <div class="col-sm-9">
+	        <input name="birdDate" type="date" class="form-control" placeholder="dd/mm/yyyy" value="{{ old('birdDate') }}">
+	      </div>
+	    </div>
+	  </div>
 	  <div class="col-md-6">
 	    <div class="form-group row">
 	      <label class="col-sm-3 col-form-label">Club</label>
@@ -78,20 +86,7 @@
 	      </div>
 	    </div>
 	  </div>
-	  <div class="col-md-6">
-	    <div class="form-group row">
-	      <label class="col-sm-3 col-form-label">Maestro</label>
-	      <div class="col-sm-9">
-	        <select name="idTeacher" class="form-control">
-	          <option>Eligue uno</option>
-	          <option value="">Maestro1</option>
-	          <option value="">Maestro2</option>
-	          <option value="">Maestro4</option>
-	          <option value="">Maestro5</option>
-	        </select>
-	      </div>
-	    </div>
-	  </div>
+	  
 	</div>
 	<p class="card-description">
 	  Dirección
@@ -139,7 +134,7 @@
 	    <div class="form-group row">
 	      <label class="col-sm-3 col-form-label">Contraseña</label>
 	      <div class="col-sm-9">
-	        <input name="password" type="password" class="form-control" id="exampleInputPassword4" placeholder="Contraseña" value="{{ old('password') }}">
+	        <input name="password" type="password" class="form-control" id="exampleInputPassword4" placeholder="Contraseña" value="">
 	      </div>
 	    </div>
 	  </div>
@@ -148,7 +143,33 @@
 	<div class="row">
 	  <div class="col-md-6">
 	    <div class="form-group row">
-	      <a href="{{ route('federados.nuevo') }}" class="btn btn-danger mr-2">Editar</button>
+	      <label class="col-sm-3 col-form-label">Maestro</label>
+	      <div class="col-sm-9">
+	        <select name="idTeacher" class="form-control">
+	        	@foreach ($teachers as $element)
+	        		<option value="{{ $element->id }}">{{ $element->name }} {{ $element->lastname }}</option>
+	        	@endforeach
+	        </select>
+	      </div>
+	    </div>
+	  </div>
+      <div class="col-md-6">
+        <div class="form-group row">
+          <label class="col-sm-3 col-form-label">Estado</label>
+          <div class="col-sm-9">
+            <select name="active" class="form-control">
+              <option value="1">Activo</option>
+              <option value="0">Inactivo</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+	<div class="row">
+	  <div class="col-md-6">
+	    <div class="form-group row">
+	      <button type="submit" class="btn btn-success mr-2">Guardar Cambios</button>
 	      <a href="{{ route('federados') }}" class="btn btn-light">Volver a la lista</a>
 	    </div>
 	  </div>

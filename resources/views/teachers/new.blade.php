@@ -9,7 +9,7 @@
 @endsection
 
 @section('form-action')
-	action = "{{ route('maestros.nuevo') }}" enctype="multipart/form-data"
+	action = "{{ route('maestros.store') }}" enctype="multipart/form-data"
 @endsection
 
 @section('form-content')

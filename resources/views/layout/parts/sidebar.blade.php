@@ -4,12 +4,18 @@
       <div class="nav-link">
         <div class="user-wrapper">
           <div class="profile-image">
-            <img src="{{ asset('fedamc/images/faces/face1.jpg') }}" alt="profile image">
+            <img src="{{ Storage::url(Auth::user()->profilePicture ) }}" alt="profile image">
           </div>
           <div class="text-wrapper">
             <p class="profile-name">{{ Auth::user()->name }}</p>
             <div>
-              <small class="designation text-muted">Administrador</small>
+              @if (Auth::user()->studend)
+                <small class="designation text-muted">Federado</small>
+              @elseif(Auth::user()->teacher)
+                <small class="designation text-muted">Maestro</small>
+              @else
+                <small class="designation text-muted">Administrador</small>
+              @endif
               <span class="status-indicator online"></span>
             </div>
           </div>

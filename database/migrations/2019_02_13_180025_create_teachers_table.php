@@ -18,7 +18,6 @@ class CreateTeachersTable extends Migration
             $table->unsignedInteger('idUser');
             $table->string('name');
             $table->string('lastname')->nullable();
-            $table->string('profilePicture')->nullable()->default('images/users/user.jpg');
             $table->string('email')->unique();
             $table->date('fNacimiento')->nullable();
             $table->integer('phone')->nullable();
@@ -28,7 +27,6 @@ class CreateTeachersTable extends Migration
             $table->string('activity')->nullable();
             $table->string('license')->nullable();
             $table->double('rate', 8, 2)->nullable();
-            $table->boolean('active')->nullable()->default('1');
             $table->foreign('idUser')->references('id')->on('users');
             $table->timestamps();
         });
@@ -41,7 +39,10 @@ class CreateTeachersTable extends Migration
      */
     public function down()
     {
-        $table->dropForeign('idUser');
+        Schema::table('teachers', function (Blueprint $table) {
+            $table->dropForeign(['idUser']);
+            $table->dropColumn('idUser');
+        });
         Schema::dropIfExists('teachers');
     }
 }

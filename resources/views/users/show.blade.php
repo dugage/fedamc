@@ -5,11 +5,7 @@
 @endsection
 
 @section('content-description')
-	@if (session('info'))
-	    <div class="alert alert-success">
-	        {{ session('info') }}
-	    </div>
-	@endif
+
 @endsection
 
 @section('form-action')
@@ -50,7 +46,13 @@
 	    <div class="form-group row">
 	      <label class="col-sm-3 col-form-label">Número de Licencia</label>
 	      <div class="col-sm-9">
-	        <input name="license" class="form-control" type="text" placeholder="Licencia" name="{{ $user->license }}" disabled>
+	        @if ($user->teacher)
+	      		<input name="license" class="form-control" type="text" placeholder="Licencia" value="{{ $user->teacher->license }}" disabled>
+	      	@elseif($user->studend)
+	      		<input name="license" class="form-control" type="text" placeholder="Licencia" value="{{ $user->studend->license }}" disabled>
+	      	@else
+	      		<input name="license" class="form-control" type="text" placeholder="Licencia" value="" disabled>
+	      	@endif
 	      </div>
 	    </div>
 	  </div>
@@ -66,6 +68,10 @@
               <button class="file-upload-browse btn btn-secondary" type="button">Subir</button>
             </span>
           </div>
+          <div class="col-sm-3 col-form-label"></div>
+          <div class="col-sm-1 col-form-label">
+            <img class="img-md rounded-circle mb-4 mb-md-0" src="{{ Storage::url($user->profilePicture) }}" alt="profile image">
+          </div>
         </div>
 	  </div>
 	  <div class="col-md-6">
@@ -77,6 +83,20 @@
 	    </div>
 	  </div>
 	</div>
+
+	<div class="row">
+      <div class="col-md-6">
+        <div class="form-group row">
+          <label class="col-sm-3 col-form-label">Estado</label>
+          <div class="col-sm-9">
+            <select name="active" class="form-control" disabled>
+              <option value="1" {{ $user->active == '1' ? 'selected' : ''}}>Activo</option>
+              <option value="0" {{ $user->active == '0' ? 'selected' : ''}}>Inactivo</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
 
 	<div class="row">
 	  <div class="col-md-6">

@@ -28,7 +28,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/login';
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
@@ -46,20 +46,12 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-
-    public function showRegistrationForm()
-    {
-        return view('login.register');
-    }
-
-
     protected function validator(array $data)
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
-            'lastname'=> ['required', 'string'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:6'],
+            'password' => ['required', 'string', 'min:6', 'confirmed'],
         ]);
     }
 
@@ -71,14 +63,10 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        User::create([
+        return User::create([
             'name' => $data['name'],
-            'lastname' => $data['lastname'],
             'email' => $data['email'],
-            //'password' => Hash::make($data['password']),
-            'password' => bcrypt($data['password']),
+            'password' => Hash::make($data['password']),
         ]);
-
-        return view('login.login');
     }
 }

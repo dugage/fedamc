@@ -14,64 +14,53 @@
 
 @section('table-head')
 	
-	<th>Usuario</th>
+	<th>Imagen</th>
 	<th>Nombre</th>
-	<th>DNI</th>
+	<th>E-mail</th>
+	<th>Licencia</th>
 	<th>creado</th>
-	<th>Club</th>
 	<th>Acciones</th>
 
 @endsection
 
 @section('table-body')
 
-	<tr>
-	    <td class="py-1">
-	      <img src="{{ asset('fedamc/images/faces-clipart/pic-1.png') }}" alt="image">
-	    </td>
-	    <td>
-	      Herman Beck
-	    </td>
-	    <td>
-	      77985965M
-	    </td>
-	    <td>
-	      Mayo 15, 2015
-	    </td>
-	    <td>
-	    	Sevilla F.C
-	    </td>
-	    <td>
-	    	<div class="btn-group" role="group" aria-label="Basic example">
-              <a href="{{ route('federados.editar') }}" class="btn btn-outline-secondary px-2">Editar</a>
-              <a href="{{ route('federados.ver') }}" class="btn btn-outline-secondary px-2">Ver</a>
-              <a href="#" class="btn btn-outline-secondary px-2">Eliminar</a>
-            </div>
-	    </td>
-	</tr>
-	<tr>
-	    <td class="py-1">
-	      <img src="{{ asset('fedamc/images/faces-clipart/pic-1.png') }}" alt="image">
-	    </td>
-	    <td>
-	      Erick Beck
-	    </td>
-	    <td>
-	      77987685Q
-	    </td>
-	    <td>
-	      Mayo 28, 2015
-	    </td>
-	    <td>
-	    	Betis
-	    </td>
-	    <td>
-	    	<div class="btn-group" role="group" aria-label="Basic example">
-              <a href="{{ route('federados.editar') }}" class="btn btn-outline-secondary px-2">Editar</a>
-              <a href="{{ route('federados.ver') }}" class="btn btn-outline-secondary px-2">Ver</a>
-              <button class="btn btn-outline-secondary px-2">Eliminar</button>
-            </div>
-	    </td>
-	</tr>
+	@foreach ($data as $studend)
+		<tr>
+		    <td class="py-1">
+		      <img src="{{ Storage::url($studend->user->profilePicture) }}" alt="image">
+		    </td>
+		    <td>
+		      	{{ $studend->name }} {{ $studend->lastname }}
+		    </td>
+		    <td>
+		    	{{ $studend->email }}
+		    </td>
+		    <td>
+		     	{{ $studend->license ?? '-' }}
+		    </td>
+		    <td>
+		    	{{ $studend->created_at }}
+		    </td>
+		    <td>
+		    	<div class="btn-group" role="group" aria-label="Basic example">
+	              <a href="{{ route('federados.editar', ['studends' => $studend->id]) }}" class="btn btn-outline-secondary px-2">
+	              	<i class="mdi mdi-pencil"></i>
+	              </a>
+	              <a href="{{ route('federados.ver', ['studends' => $studend->id]) }}" class="btn btn-outline-secondary px-2">
+					<i class="mdi mdi-eye"></i>
+	              </a>
+	              <button id="boton-eliminar" class="btn btn-outline-secondary px-2" onclick="document.getElementById('{{$studend->id}}').submit()">
+					<i class="mdi mdi-delete"></i>
+	              </button>
+
+	              <form class="d-none" id="{{$studend->id}}" method="POST" action="{{ route('federados.eliminar', ['studend' => $studend->id]) }}">
+                        @csrf
+                        @method('DELETE')
+                   </form>
+	            </div>
+		    </td>
+		</tr>
+	@endforeach
 
 @endsection

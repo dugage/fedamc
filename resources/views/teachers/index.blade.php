@@ -25,10 +25,10 @@
 
 @section('table-body')
 
-	@foreach ($teachers as $teacher)
+	@foreach ($data as $teacher)
 		<tr>
 		    <td class="py-1">
-		      <img src="{{ asset('fedamc/images/faces-clipart/pic-1.png') }}" alt="image">
+		      <img src="{{ Storage::url($teacher->user->profilePicture) }}" alt="image">
 		    </td>
 		    <td>
 		      {{ $teacher->name }}
@@ -37,7 +37,7 @@
 		      {{ $teacher->email }}
 		    </td>
 		    <td>
-		    	@if ($teacher->active == 0)
+		    	@if ($teacher->user->active == 0)
 		    		<label class="badge badge-danger">Inactivo</label>
 		    	@else
 		    		<label class="badge badge-success">Activo</label>
@@ -45,7 +45,7 @@
 		      
 		    </td>
 		    <td>
-		      <strong>#{{ $teacher->license }}</strong>
+		    	{{ $teacher->license ?? '-' }}
 		    </td>
 		    <td>
 		    	<div class="btn-group" role="group" aria-label="Basic example">

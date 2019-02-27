@@ -9,7 +9,7 @@
 @endsection
 
 @section('form-action')
-	action = "{{ route('usuarios.nuevo') }}" enctype="multipart/form-data"
+	action = "{{ route('usuarios.store') }}" enctype="multipart/form-data"
 @endsection
 
 @section('form-content')
@@ -83,13 +83,24 @@
 	    <div class="form-group row">
           <label class="col-sm-3 col-form-label">Foto de Perfil</label>
           <div class="input-group col-sm-9">
-            <input type="file" name="profilePicture" class="form-control file-upload-info" placeholder="Subir imagen" accept="image/png, image/jpeg, image/gif">
+            <input type="file" name="profilePicture" class="form-control file-upload-info" placeholder="Subir imagen" accept="image/png, image/jpeg, image/gif" value="">
             <span class="input-group-append">
               <button class="file-upload-browse btn btn-info" type="button">Subir</button>
             </span>
           </div>
         </div>
 	  </div>
+	  <div class="col-md-6">
+        <div class="form-group row">
+          <label class="col-sm-3 col-form-label">Estado</label>
+          <div class="col-sm-9">
+            <select name="active" class="form-control">
+              <option value="1">Activo</option>
+              <option value="0">Inactivo</option>
+            </select>
+          </div>
+        </div>
+      </div>
 	</div>
 
 	<div class="row">

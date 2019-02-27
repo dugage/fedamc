@@ -12,19 +12,24 @@ class UserController extends Controller
 {
     
     public function index(){
-    	$data = User::all();
-    	return view('users.index')->with('users', $data);
+    	$data = User::where('id','!=', 1)->paginate(10);
+    	return view('users.index')->with('data', $data);
     }
 
-    public function new(Request $request){
+    public function create(){
+        return view('users.new');
+    }
+
+    public function store(Request $request){
     	$data = $request->validate([
     		'name' => 'required',
     		'lastname' => 'required',
     		'email' => 'required|email|unique:users,email',
     		'license' => '',
-    		'profilePicture' => 'image',
+    		'profilePicture' => '',
             'password' => 'required',
             'typeUser' => '',
+            'active' => 'required',
     	]);
         // encriptamos la contrasseña
         $data['password'] = bcrypt('password');
@@ -34,6 +39,8 @@ class UserController extends Controller
    		}
 
    		$user = User::create($data);
+
+        //dd($data);
 
         //creamos un maestro o federado según se elija
         if ($data['typeUser'] == 'maestro') {
@@ -48,10 +55,11 @@ class UserController extends Controller
             $insert = new Studends;
             $insert->name = $data['name'];
             $insert->lastname = $data['lastname'];
-            $insert->profilePicture = $data['profilePicture'];
+            //$insert->profilePicture = $data['profilePicture'];
             $insert->email = $data['email'];
             $insert->idUser = $user->id;
-            $teacher->save();
+            $insert->idTeacher = 1;
+            $insert->save();
 
         }
         //redireccionamos
@@ -74,6 +82,7 @@ class UserController extends Controller
             'license' => '',
             'profilePicture' => 'image',
             'password' => '',
+            'active' => 'required',
     	]);
 
         //Si la contraseña es null lo quitamos del array
@@ -84,21 +93,30 @@ class UserController extends Controller
         }
         //Comprobamos si existe una imagen
    		if ($request->hasFile('profilePicture')) {
-   			$data['profilePicture'] = $request->file('profilePicture')->store('public/profile');
+   			$data['profilePicture'] = $request->file('profilePicture')->store('public/profiles');
    		}
+
+        if ($user->teacher) {
+            $user->teacher->update($data);
+        }elseif($user->studend){
+            $user->studend->update($data);
+        }
+
         //actualizamos
         $user->update($data);
         //redirecionamos
         return redirect()->route('usuarios.ver',['user' => $user])->with('info','Perfil acualizado');
     }
 
-    public function delete(User $user){
-        //Buscarmos el tipo de usuario que es y lo eliminamos
-        if ($user->teacher != null) {
+    public function destroy(User $user){
+        //Buscamos el federado o maestro que tiene vinculo con el id de este usuario
+        //y lo eliminamos. 
+        if ($user->teacher) {
             $user->teacher->delete();
-        }elseif($user->studend != null){
-            $user->studen->delete();
+        }elseif ($user->studend) {
+            $user->studend->delete();
         }
+        
         //Eliminamos el usuario
         $user->delete();
         //Regresamos a la lista

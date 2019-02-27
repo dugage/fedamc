@@ -33,7 +33,10 @@ class CreateDirectorsTable extends Migration
      */
     public function down()
     {
-        $table->dropForeign('idUser');
+        Schema::table('directors', function (Blueprint $table) {
+            $table->dropForeign('directors_idUser_foreign');
+            $table->dropColumn('idUser');
+        });
         Schema::dropIfExists('directors');
     }
 }
